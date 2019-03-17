@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.restart.spmaster.mapper.HrMapper" >
+  <resultMap id="BaseResultMap" type="com.restart.spmaster.domain.entity.Hr" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="CHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="enabled" property="enabled" jdbcType="BIT" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="userface" property="userface" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="BaseResultMapVo" type="com.restart.spmaster.domain.vo.HrVo" extends="BaseResultMap">
+    <!--column="id"传递id过去-->
+    <collection property="roles" ofType="com.restart.spmaster.domain.entity.Role"
+                javaType="ArrayList" select="com.restart.spmaster.mapper.HrMapper.getRolesByHrId" column="id">
+    </collection>
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, name, phone, telephone, address, enabled, username, password, userface, remark
+  </sql>
+
+  <!--<select id="loadUserByUsername" resultMap="BaseResultMapVo">
+        select h.*,r.`id` as rid,r.`name` as rname,r.`nameZh` as rnamezh
+        from hr h
+        left join hr_role hr on h.id = hr.hrid
+        left join role r on hr.rid = r.id
+        WHERE h.username=#{username}
+  </select>-->
+
+  <select id="loadUserByUsername" resultMap="BaseResultMapVo">
+        select * from hr WHERE username=#{username}
+    </select>
+
+  <select id="getRolesByHrId" resultType="com.restart.spmaster.domain.entity.Role">
+        SELECT r.* FROM role r
+        left join hr_role h on h.rid=r.id
+        where h.hrid=#{id}
+    </select>
+</mapper>

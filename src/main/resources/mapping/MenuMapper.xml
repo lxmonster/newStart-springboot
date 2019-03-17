@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.restart.spmaster.mapper.MenuMapper" >
+  <resultMap id="BaseResultMap" type="com.restart.spmaster.domain.entity.Menu" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="component" property="component" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="iconCls" property="iconcls" jdbcType="VARCHAR" />
+    <result column="keepAlive" property="keepalive" jdbcType="BIT" />
+    <result column="requireAuth" property="requireauth" jdbcType="BIT" />
+    <result column="parentId" property="parentid" jdbcType="INTEGER" />
+    <result column="enabled" property="enabled" jdbcType="BIT" />
+  </resultMap>
+
+  <resultMap id="BaseResultMapVo" type="com.restart.spmaster.domain.vo.MenuVo">
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="component" property="component" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="iconCls" property="iconcls" jdbcType="VARCHAR" />
+    <result column="keepAlive" property="keepalive" jdbcType="BIT" />
+    <result column="requireAuth" property="requireauth" jdbcType="BIT" />
+    <result column="parentId" property="parentid" jdbcType="INTEGER" />
+    <result column="enabled" property="enabled" jdbcType="BIT" />
+    <collection property="roles" ofType="com.restart.spmaster.domain.entity.Role">
+      <id column="rid" property="id"/>
+      <result column="name" property="name"/>
+      <result column="namezh" property="nameZh"/>
+    </collection>
+  </resultMap>
+
+  <select id="getAllMenu" resultMap="BaseResultMapVo">
+        select m.*,r.`id` as rid,r.`name` as rname,r.`nameZh` as rnamezh
+        from menu m
+        left join menu_role mr on m.`id`=mr.`mid`
+        left join role r on mr.`rid`=r.`id`
+        WHERE m.`enabled`=true order by m.`id` desc
+    </select>
+</mapper>
